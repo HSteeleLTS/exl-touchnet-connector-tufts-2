@@ -9,7 +9,7 @@ const fs = require('fs');
 
 const http = require('http');
 const https = require('https');
-const library = process.env.ALMA_LIBRARY_CODE;
+const env_var_libraries = process.env.ALMA_LIBRARY_CODE;
 let privateKey, certificate, credentials;
 if (process.env.CERTIFICATE_KEY_FILE) {
   privateKey  = fs.readFileSync(process.env.CERTIFICATE_KEY_FILE, 'utf8');
@@ -37,6 +37,8 @@ app.get('/', (request, response) => {
 app.get('/touchnet', async (request, response) => {
   const protocol = request.get('x-forwarded-proto') || request.protocol;
   const host = request.get('x-forwarded-host') || request.get('host');
+  const library = request.query.library
+
   const returnUrl = (protocol + '://' + host + request.originalUrl.split("?").shift()).replace(/\/$/, "");;
   const referrer = request.query.returnUrl || request.header('Referer');
 
@@ -93,6 +95,7 @@ const get = async (qs, returnUrl, referrer) => {
       institution
     });
     console.log('Successfully created ticket', ticket);
+	upay_site_id = JSON.parse(env_var_libraries)[library];
     return responses.redirectForm(ticket, user_id, upay_site_id, upay_site_url);
   } catch (e) {
     console.error("Error in setting up payment:", e.message)

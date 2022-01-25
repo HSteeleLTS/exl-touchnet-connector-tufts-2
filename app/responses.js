@@ -1,4 +1,5 @@
 const redirectForm = (ticket, user_id, upay_site_id, upay_site_url) => {
+  const parsed_upay_site_id = 
   return `
     <form method="post" action="${upay_site_url || process.env.UPAY_SITE_URL}" name="touchnet">
       <input type="hidden" name="UPAY_SITE_ID" value="${upay_site_id || process.env.UPAY_SITE_ID}">
