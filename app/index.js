@@ -37,7 +37,7 @@ app.get('/', (request, response) => {
 app.get('/touchnet', async (request, response) => {
   const protocol = request.get('x-forwarded-proto') || request.protocol;
   const host = request.get('x-forwarded-host') || request.get('host');
-  const library = request.query.library
+
 
   const returnUrl = (protocol + '://' + host + request.originalUrl.split("?").shift()).replace(/\/$/, "");;
   const referrer = request.query.returnUrl || request.header('Referer');
@@ -59,7 +59,9 @@ const get = async (qs, returnUrl, referrer) => {
     post_message = 'true';
   } else if (qs.jwt) { 
     /* From Primo VE */
+	library = qs.library
     try {
+	   
       ({ userName: user_id, institution } = jwt.decode(qs.jwt));
     } catch (e) {
       console.error("Error in retrieving user information:", e.message)
