@@ -19,7 +19,7 @@ const payFees = async (user_id, amount, transaction_id, library = null) => {
     if (amount <= 0) break;
     const fee = fees.fee[i];
     const to_pay = Math.min(amount, fee.balance);
-    await alma.postp(`${fee.link}?op=pay&amount=${to_pay}&method=ONLINE&external_transaction_id=${transaction_id}&comment=paid_by_user_in_touchnet`, null);
+    await alma.postp(`${fee.link}?op=pay&amount=${to_pay}&method=ONLINE&external_transaction_id=${transaction_id}&comment=Paid%20in%20Touchnet`, null);
     amount = amount - to_pay;
   }
 }
