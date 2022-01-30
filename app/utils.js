@@ -7,7 +7,9 @@ const requestp = ( options ) => {
     options = {url: options}
   } 
   return new Promise(function (resolve, reject) {
+	console.log('options' + options);
     request(options, function(err, response, body) {
+	  
       if (err) reject(err);
       else if (/^[45]/.test(response.statusCode)) reject(new Error(response.statusMessage));
       else resolve(body);
