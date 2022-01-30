@@ -7,7 +7,7 @@ const requestp = ( options ) => {
     options = {url: options}
   } 
   return new Promise(function (resolve, reject) {
-	console.log('options' + options);
+	console.log(options);
     request(options, function(err, response, body) {
 	  
       if (err) reject(err);
