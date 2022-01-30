@@ -35,8 +35,9 @@ class TouchnetWS {
 
   async generateTicket(user_id, options ) {
     let response = await touchnetRequest(this.uri, this.auth, generateTicketBody(user_id, options));
+	console.log('response');
 	console.log(response);
-	console.log(getSingleNode('/soapenv:Envelope/soapenv:Body/tn:generateSecureLinkTicketResponse/tn:ticket', response);
+
     return getSingleNode('/soapenv:Envelope/soapenv:Body/tn:generateSecureLinkTicketResponse/tn:ticket', response);
 	
   }
