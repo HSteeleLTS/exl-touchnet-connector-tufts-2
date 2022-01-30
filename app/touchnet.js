@@ -52,6 +52,10 @@ class TouchnetWS {
 module.exports = TouchnetWS;
 
 const touchnetRequest = (uri, auth, xml) => {
+	
+  console.log(uri);
+  console.log(auth);
+  console.log(xml);
   let options = {
     url: uri,
     method: 'POST',
