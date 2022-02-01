@@ -49,7 +49,9 @@ app.get('/touchnet', async (request, response) => {
   console.log(request.header('Referer'));
   console.log('host');
   console.log(host);
-  const returnUrl = (protocol + '://' + host + request.originalUrl.split("?").shift()).replace(/\/$/, "");;
+  const returnUrl = (protocol + '://' + host + request.originalUrl.split("?").shift()).replace(/\/$/, "");
+  console.log('returnUrl');
+  console.log(returnUrl);
   const referrer = request.query.returnUrl || request.header('Referer');
 
   try {
