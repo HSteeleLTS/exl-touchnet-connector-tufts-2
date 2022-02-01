@@ -43,7 +43,7 @@ app.get('/touchnet', async (request, response) => {
   console.log('request');
   console.log(request);
   console.log('request original url');
-  console.log(request.originalURL);
+  console.log(request.originalUrl);
   console.log('request query');
   console.log(request.query);
   console.log('request header referrer');
