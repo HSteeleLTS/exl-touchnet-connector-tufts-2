@@ -7,6 +7,7 @@ const { requestp, frombase64 } = require('./utils');
 const { getFees, payFees } = require('./alma');
 const fs = require('fs');
 global.returnUrl = "https://www.library.tufts.edu/hsteele/alma_touchnet_integration/index.html";
+global.successUrl;
 global.applicationUrl = "http://libapps-stage-01.uit.tufts.edu:3002/touchnet";
 const http = require('http');
 const https = require('https');
@@ -72,7 +73,8 @@ const get = async (qs, returnUrl, referrer) => {
     post_message = 'true';
   } else if (qs.jwt) { 
     /* From Primo VE */
-	library = qs.library
+	library = decodeURIComponent(qs.library);
+	successUrl = qs.success_url;
     try {
 	   
       ({ userName: user_id, institution } = jwt.decode(qs.jwt));
@@ -144,11 +146,11 @@ const success = async body => {
   try {
     let returnUrl = "https://www.library.tufts.edu/hsteele/alma_touchnet_integration/index.html";
     if (post_message === 'true') {
-      return responses.returnToReferrer(returnUrl, { amount: amount, external_transaction_id: receipt, user_id: user_id });
+      return responses.returnToReferrer(successUrl, { amount: amount, external_transaction_id: receipt, user_id: user_id });
     } else {    
       await payFees(user_id, amount, receipt, library);
-      console.log('Payment posted to Alma. Returning to referrer', returnUrl);
-      return responses.returnToReferrer(returnUrl);
+      console.log('Payment posted to Alma. Returning to referrer', successUrl);
+      return responses.returnToReferrer(successUrl);
     }
   } catch (e) {
     console.error("Error in posting payment to Alma:", e.message);
