@@ -15,7 +15,7 @@ const redirectForm = (ticket, user_id, upay_site_id, upay_site_url) => {
   `
 }
 
-const returnToReferrer = (referrer, message) => {
+const returnToReferrer = (returnUrl, message) => {
   let form = '<p>Payment successfully processed.</p>';
   if (message) {
     form += `
@@ -25,13 +25,13 @@ const returnToReferrer = (referrer, message) => {
       window.close();
     </script>
     `    
-  } else if (referrer) {
+  } else if (returnUrl) {
     form += `
       <p>Redirecting...</p>
       <script>
-        setInterval(() => { window.location.href = "${referrer}"; }, 2000);
-      </script>
-    `
+        setInterval(() => { window.location.href = "${returnUrl}"; }, 2000);
+      </script>`
+    
   }
   return form;
 }

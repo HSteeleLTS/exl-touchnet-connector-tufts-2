@@ -6,7 +6,8 @@ const dom = require('@xmldom/xmldom').DOMParser;
 const { requestp, frombase64 } = require('./utils');
 const { getFees, payFees } = require('./alma');
 const fs = require('fs');
-
+global.returnUrl = "https://www.library.tufts.edu/hsteele/alma_touchnet_integration/index.html";
+global.applicationUrl = "http://libapps-stage-01.uit.tufts.edu:3002/touchnet";
 const http = require('http');
 const https = require('https');
 const env_var_libraries = process.env.ALMA_LIBRARY_CODE;
@@ -49,7 +50,7 @@ app.get('/touchnet', async (request, response) => {
   console.log(request.header('Referer'));
   console.log('host');
   console.log(host);
-  const returnUrl = (protocol + '://' + host + request.originalUrl.split("?").shift()).replace(/\/$/, "");
+  //returnUrl = (protocol + '://' + host + request.originalUrl.split("?").shift()).replace(/\/$/, "");
   console.log('returnUrl');
   console.log(returnUrl);
   const referrer = request.query.returnUrl || request.header('Referer');
@@ -101,8 +102,8 @@ const get = async (qs, returnUrl, referrer) => {
   try {
     let ticket = await touchnet.generateTicket(user_id, {
       amount: total_sum,
-      success: returnUrl + '/success',
-      error: returnUrl + '/error',
+      success: applicationUrl + '/success',
+      error: applicationUrl + '/error',
       cancel: referrer,
       referrer,
       post_message,
@@ -129,22 +130,25 @@ app.post('/touchnet/success', async (request, response) => {
 const success = async body => {
   await init();
   const amount = body.pmt_amt;
-  let receipt, user_id, referrer, post_message;
-  try {
-    ({ receipt, user_id, referrer, post_message } = await touchnet.authorize(body.session_identifier));
-    referrer = decodeURIComponent(referrer);
-  } catch(e) {
-    console.error("Error while authorizing payment:", e.message);
-    throw new Error('Could not authorize payment.')
-  }
+  //let returnUrl = "https://www.library.tufts.edu/hsteele/alma_touchnet_integration/index.html";
+  let receipt, user_id, post_message;
+  //try {
+    ({ receipt, user_id, post_message } = await touchnet.authorize(body.session_identifier));
+    
+      //returnUrl = decodeURIComponent(returnUrl);
+  //} catch(e) {
+  //  console.error("Error while authorizing payment:", e.message);
+  //  throw new Error('Could not authorize payment.')
+  //}
 
   try {
+    let returnUrl = "https://www.library.tufts.edu/hsteele/alma_touchnet_integration/index.html";
     if (post_message === 'true') {
-      return responses.returnToReferrer(referrer, { amount: amount, external_transaction_id: receipt, user_id: user_id });
+      return responses.returnToReferrer(returnUrl, { amount: amount, external_transaction_id: receipt, user_id: user_id });
     } else {    
       await payFees(user_id, amount, receipt, library);
-      console.log('Payment posted to Alma. Returning to referrer', referrer);
-      return responses.returnToReferrer(referrer);
+      console.log('Payment posted to Alma. Returning to referrer', returnUrl);
+      return responses.returnToReferrer(returnUrl);
     }
   } catch (e) {
     console.error("Error in posting payment to Alma:", e.message);
