@@ -36,4 +36,19 @@ const returnToReferrer = (returnUrl, message) => {
   return form;
 }
 
-module.exports = { redirectForm, returnToReferrer };
+const goToCancel = (returnUrl) => {
+    let form = '<p>Payment cancelled</p>';
+    
+    form += `
+      <p>Redirecting...</p>
+      <script>
+        setInterval(() => { window.location.href = "${returnUrl}"; }, 2000);
+      </script>`
+
+                    
+  return form;
+ 
+}
+
+
+module.exports = { redirectForm, returnToReferrer, goToCancel };

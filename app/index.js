@@ -8,7 +8,8 @@ const { getFees, payFees } = require('./alma');
 const fs = require('fs');
 global.returnUrl = "https://www.library.tufts.edu/hsteele/alma_touchnet_integration/index.html";
 global.successUrl;
-global.applicationUrl = "http://libapps-stage-01.uit.tufts.edu:3002/touchnet";
+global.cancelUrl;
+global.applicationUrl = "https://exl-touchnet-connector.tufts.edu/touchnet";
 const http = require('http');
 const https = require('https');
 const env_var_libraries = process.env.ALMA_LIBRARY_CODE;
@@ -41,16 +42,6 @@ app.get('/touchnet', async (request, response) => {
   const host = request.get('x-forwarded-host') || request.get('host');
 
   
-  console.log('request');
-  console.log(request);
-  console.log('request original url');
-  console.log(request.originalUrl);
-  console.log('request query');
-  console.log(request.query);
-  console.log('request header referrer');
-  console.log(request.header('Referer'));
-  console.log('host');
-  console.log(host);
   //returnUrl = (protocol + '://' + host + request.originalUrl.split("?").shift()).replace(/\/$/, "");
   console.log('returnUrl');
   console.log(returnUrl);
@@ -75,6 +66,7 @@ const get = async (qs, returnUrl, referrer) => {
     /* From Primo VE */
 	library = decodeURIComponent(qs.library);
 	successUrl = qs.success_url;
+        cancelUrl = qs.cancel_url;
     try {
 	   
       ({ userName: user_id, institution } = jwt.decode(qs.jwt));
@@ -87,7 +79,6 @@ const get = async (qs, returnUrl, referrer) => {
     try {
       const ref = new URL(referrer);
       const url = `${ref.protocol}//${ref.host}/primo_library/libweb/webservices/rest/PDSUserInfo?institute=${qs.institution}&pds_handle=${qs.pds_handle}`;
-      console.log('retrieving borinfo from', url);
       const borinfo = await requestp({url});
       const node = require('xpath').select('/bor/bor_id/id', new dom().parseFromString(borinfo));
       user_id = node.length > 0 ? node[0].firstChild.data : null;
@@ -106,7 +97,7 @@ const get = async (qs, returnUrl, referrer) => {
       amount: total_sum,
       success: applicationUrl + '/success',
       error: applicationUrl + '/error',
-      cancel: referrer,
+      cancel: applicationUrl + '/cancel',
       referrer,
       post_message,
       institution
@@ -134,14 +125,14 @@ const success = async body => {
   const amount = body.pmt_amt;
   //let returnUrl = "https://www.library.tufts.edu/hsteele/alma_touchnet_integration/index.html";
   let receipt, user_id, post_message;
-  //try {
+  try {
     ({ receipt, user_id, post_message } = await touchnet.authorize(body.session_identifier));
     
       //returnUrl = decodeURIComponent(returnUrl);
-  //} catch(e) {
-  //  console.error("Error while authorizing payment:", e.message);
-  //  throw new Error('Could not authorize payment.')
-  //}
+  } catch(e) {
+    console.error("Error while authorizing payment:", e.message);
+    throw new Error('Could not authorize payment.')
+  }
 
   try {
     let returnUrl = "https://www.library.tufts.edu/hsteele/alma_touchnet_integration/index.html";
@@ -161,6 +152,31 @@ const success = async body => {
 app.get('/touchnet/error', (request, response) => {
   response.status(400).send('An error has occurred');
 })
+
+app.get('/touchnet/cancel', (request, response) => {
+  try {
+    response.status(200).send(responses.goToCancel(cancelUrl));
+}
+   catch(e) {
+        response.status(400).send(e.message);
+  }
+
+})
+
+const cancel = async body => {
+
+    await init();
+     try {
+    //let returnUrl = "https://www.library.tufts.edu/hsteele/alma_touchnet_integr$
+
+      return responses.returnToReferrer(cancelUrl);
+    } 
+   catch (e) {
+    console.error("cancel error", e.message);
+    throw new Error('cancel error');
+  }
+}
+
 
 // app.listen(PORT);
 http.createServer(app).listen(PORT);
