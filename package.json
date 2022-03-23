@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node app/index.js",
+	"stop": "node app/server.stop.js",
     "hosted:start": "sam local start-api --warm-containers EAGER --env-vars .env.hosted.json -t hosted.yaml",
     "hosted:package": "aws cloudformation package --template ./hosted.yaml --s3-bucket almadtest --output-template hosted.packaged.yaml --region us-east-1 --s3-prefix sam",
     "hosted:deploy": "npm run hosted:package && aws cloudformation deploy --template-file hosted.packaged.yaml --stack-name TouchnetConnectorHosted --capabilities CAPABILITY_IAM --region us-east-1",
