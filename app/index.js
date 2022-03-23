@@ -13,6 +13,7 @@ global.applicationUrl = "https://exl-touchnet-connector.tufts.edu/touchnet";
 const http = require('http');
 const https = require('https');
 const env_var_libraries = process.env.ALMA_LIBRARY_CODE;
+const postback_url = process.env.POSTBACK_URL;
 let privateKey, certificate, credentials;
 if (process.env.CERTIFICATE_KEY_FILE) {
   privateKey  = fs.readFileSync(process.env.CERTIFICATE_KEY_FILE, 'utf8');
@@ -43,8 +44,7 @@ app.get('/touchnet', async (request, response) => {
 
   
   //returnUrl = (protocol + '://' + host + request.originalUrl.split("?").shift()).replace(/\/$/, "");
-  console.log('returnUrl');
-  console.log(returnUrl);
+
   const referrer = request.query.returnUrl || request.header('Referer');
 
   try {
@@ -141,6 +141,8 @@ const success = async body => {
     } else {    
       await payFees(user_id, amount, receipt, library);
       console.log('Payment posted to Alma. Returning to referrer', successUrl);
+      body['library'] = library;
+      responses.postback(body, postback_url);
       return responses.returnToReferrer(successUrl);
     }
   } catch (e) {
