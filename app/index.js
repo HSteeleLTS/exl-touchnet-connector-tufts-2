@@ -51,6 +51,9 @@ app.get('/touchnet', async (request, response) => {
     const resp = await get(request.query, returnUrl, referrer);
     response.send(resp);
   } catch (e) {
+	if (e.message == "Nothing to pay"){
+		return response.status(400).send("<p>There are no more fines to pay at this library. Click the <a href='javascript:history.back()'>Back</a> button to pay more fines");
+	}
     return response.status(400).send(e.message);
   }
 })
@@ -181,7 +184,7 @@ const cancel = async body => {
 
 
 // app.listen(PORT);
-http.createServer(app).listen(PORT);
+server = http.createServer(app).listen(PORT);
 if (credentials) https.createServer(credentials, app).listen(SECURE_PORT);
 // We are only using socket.io here to respond to the npmStop signal
 // To support IPC (Inter Process Communication) AKA RPC (Remote P.C.)
