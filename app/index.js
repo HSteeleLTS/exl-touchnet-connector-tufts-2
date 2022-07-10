@@ -1,7 +1,9 @@
 const express = require('express');
 const jwt     = require('jsonwebtoken');
+const ejs = require('ejs');
 const TouchnetWS = require('./touchnet');
 const responses = require('./responses');
+
 const dom = require('@xmldom/xmldom').DOMParser;
 const { requestp, frombase64 } = require('./utils');
 const { getFees, payFees } = require('./alma');
@@ -37,6 +39,107 @@ app.use(express.urlencoded({extended: true}));
 app.get('/', (request, response) => {
   response.send('Touchnet connector');
 })
+
+app.get('/fines', async (request, response) => {
+	
+/* 	const protocol = request.get('x-forwarded-proto') || request.protocol;
+  const host = request.get('x-forwarded-host') || request.get('host');
+
+  
+  //returnUrl = (protocol + '://' + host + request.originalUrl.split("?").shift()).replace(/\/$/, "");
+
+  const referrer = request.query.returnUrl || request.header('Referer'); */
+
+    
+	
+		if (request.query.jwt) { 
+    /* From Primo VE */
+	
+    try {
+	   
+      ({ userName: user_id, institution } = jwt.decode(request.query.jwt));
+    
+	libraries = ['GINN', 'HIRSH', 'MUSIC', 'SMFA', 'TISCH', 'VET'];
+	libraries_and_fines = {'GINN': 0, 'HIRSH': 0, 'MUSIC': 0, 'SMFA': 0, 'TISCH': 0, 'VET': 0};
+	for (const l of libraries) {
+			({ total_sum } = await getFees(user_id, l));
+			libraries_and_fines[l] = total_sum;
+		
+    // here value is the array element being iterated
+}
+		
+		
+		
+	
+    for (let library of Object.keys(libraries_and_fines)) {
+       console.log("Fines owed at " + library + ": " + libraries_and_fines[library]);
+	   
+	   
+    }
+	
+	
+
+	g = libraries_and_fines['GINN'];
+	h = libraries_and_fines['HIRSH'];
+	m = libraries_and_fines['MUSIC'];
+	s = libraries_and_fines['SMFA'];
+	t = libraries_and_fines['TISCH'];
+	v = libraries_and_fines['VET'];
+	
+	
+	app.use( express.static( "branding" ) );
+
+	app.set('view engine', 'html');
+	app.engine('html', require('ejs').renderFile);
+	response.render("./index", {ginn: g, hirsh: h, music: m, smfa: s, tisch: t, vet: v});
+	//response.render("./index", {libraries_and_fines: libraries_and_fines});
+	}
+	catch (e) {
+      console.error("Error in retrieving user information:", e.message)
+      throw new Error('Cannot retrieve user details information.');
+    }
+	
+
+  } 
+	
+
+	
+	//return response.status(200).send("<p>Got to fines landing page,/p>");
+    //fs.createReadStream('index.html').pipe(response);
+
+	
+	
+
+})
+
+/* const land = async(qs) => {
+	
+	if (qs.jwt) { 
+    /* From Primo VE */
+	
+/*     try {
+	   
+      ({ userName: user_id, institution } = jwt.decode(qs.jwt));
+    } catch (e) {
+      console.error("Error in retrieving user information:", e.message)
+      throw new Error('Cannot retrieve user details information.');
+    }
+	
+	libraries = ['GINN', 'HIRSH', 'MUSIC', 'SMFA', 'TISCH', 'VET'];
+	libraries_and_fines = {'GINN': 0, 'HIRSH': 0, 'MUSIC': 0, 'SMFA': 0, 'TISCH': 0, 'VET': 0}
+	for (const l in libraries){
+		
+		({ total_sum } = await getFees(user_id, l));
+		libraries_and_fines[l] = total_sum
+		
+	}
+	
+	libraries_and_fines
+
+	
+} */
+
+ 
 
 app.get('/touchnet', async (request, response) => {
   const protocol = request.get('x-forwarded-proto') || request.protocol;
@@ -196,4 +299,4 @@ io.on('connection', (socketServer) => {
   });
 });
 
-module.exports = { get, success };
+module.exports = { get, success};
