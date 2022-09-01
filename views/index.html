@@ -3,10 +3,10 @@
         <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
         <title>Tufts University Libraries</title>
 <!-- To Create a notice
-        remove the "display: none;" attribute from the notice CSS class and edit the text in the notice span below.
+        remove the "display: none;" attr class="row"ibute from the notice CSS class and edit the text in the notice span below.
 
         To remove a notice
-        Add "display: none;" (without the quotes) attribute in the notice CSS class
+        Add "display: none;" (without the quotes) attr class="row"ibute in the notice CSS class
 
 -->
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
@@ -14,6 +14,7 @@
                 #tuftsHeader {height: 95px; background: url(branding/serialssolutions/background.jpg) repeat-x top left #427dc1;}
                 img.tufts {height: 46px; width: 105px; float: right; margin-top: 10px; margin-right: 5px; border: 0;}
                 img.banner {height: 95px; width: 539px; border: 0;}
+				img.footer {height: 95px; width: 200px; border: 0;}
                 #tuftsNav {float: right; margin-top: 10px; margin-right: 10px; font-size: .875em;}
 
 
@@ -27,15 +28,34 @@
                 h3 {font-size: 85%; margin-bottom: 10px;} 
                 h4 {font-size: 16px; font-weight:bold;}
                 p {font-size: 14px; margin-top: 10px; padding-right: 20px;} 
+				td {font-size: 14px;}
+				table {margin-left: 3%; white-space: nowrap;}
                 p.list {margin-bottom: 0; margin-top: 0;} 
                 p.listfirst {margin-top: 10px; margin-bottom: 0; } 
                 p.subscript {font-size: 60%; margin-top: 30px;} 
                 hr {border: none; background-color: #ccc; color: #ccc; height: 1px; margin-top: 20px;} 
-
+				#fines { width: 40%;}
+				.left {width: 80%;}
+				.right {width: 20%;}
+				
+				#footer{height: 110px; background: repeat-x top left #427dc1;}
+                #footer a {color:white}
                 ul li {font-size: 12px; margin-bottom: 10px;} 
+				
+				#footer_table td {font-size: .9em; color:white;}
 
 
                 body{font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 16px; padding:0; margin:0;}
+				#float-first {    float: left; clear: none;}
+				#float-second {    float: left;clear: none;}
+				
+				@media(max-width:767px) {
+					#footer {
+						display: flex;
+						flex-wrap: wrap;
+					}
+
+				}
 
 
 
@@ -45,7 +65,7 @@
   $( document ).ready(function() {
   
 	 /* var libraries_and_fines = "<%= libraries_and_fines %>";
-	  Object.entries(libraries_and_fines).forEach(([key, value]) => {
+	  Object.entr class="row"ies(libraries_and_fines).forEach(([key, value]) => {
          alert(key + ": " + value);
 	  });*/
 		 
@@ -54,7 +74,7 @@
 		
       const searchParams = new URLSearchParams(window.location.search);
       const jwt = searchParams.get('jwt')
-      const links = document.body.querySelectorAll('.resourcesList a');
+      const links = document.body.querySelectorAll('.fine-link');
 
 
 	  $( ".amount").each(function( index ) {
@@ -62,13 +82,14 @@
 		  number = Number($( this ).text())
 		  
 		  if (number <= 0) {
-				$(this).closest('li').remove();
+				$(this).parents('tr').remove();
 		  }
 		   
 		   else{
 	  
 
-			$(this).text(" $(" + number.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ")");
+			$(this).text(" ($" + number.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ")");
+			//$(this).text(" $(" + number.toLocaleStr class="row"ing(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ")");
 		  }
 	  });
 
@@ -83,39 +104,39 @@
 	  }
 	  
       for (i=0; i<links.length; i++) {
-      links[i].href = links[i].href + '&jwt=' + jwt;
- 	  var link_language_library = $(links[i]).text();
-	  if (link_language_library == "Tisch Library"){
-	  	links[i].href = links[i].href + "&library=TISCH";
-		links[i].href = links[i].href + "&success_url=https://tischlibrary.tufts.edu/what-we-have/borrow-and-request/fines-fees/pay-fines/thank-you";
-		links[i].href = links[i].href + "&cancel_url=https://tischlibrary.tufts.edu/what-we-have/borrow-and-request/fines-fees/pay-fines/cancel";
-		                                              //http://tischlibrary.tufts.edu/use-library/borrow-renew-or-request/pay-fine/cancelled
-	  }
+		  links[i].href = links[i].href + '&jwt=' + jwt;
+		  var link_language_library = links[i].id;
+		  if (link_language_library == "tisch"){
+			links[i].href = links[i].href + "&library=TISCH";
+			links[i].href = links[i].href + "&success_url=https://tischlibrary.tufts.edu/test/payment-thank-you";
+			links[i].href = links[i].href + "&cancel_url=https://tischlibrary.tufts.edu/test/payment-cancelled";
+														  //http://tischlibrary.tufts.edu/use-library/borrow-renew-or-request/pay-fine/cancelled
+		  }
 
-	  else if (link_language_library == "Lilly Music Library"){
-	    links[i].href = links[i].href + "&library=MUSIC";
-		links[i].href = links[i].href + "&success_url=https://tischlibrary.tufts.edu/what-we-have/borrow-and-request/fines-fees/pay-fines/thank-you";
-		links[i].href = links[i].href + "&cancel_url=https://tischlibrary.tufts.edu/what-we-have/borrow-and-request/fines-fees/pay-fines/cancel";
-	  }
-	  
-	  else if (link_language_library == "SMFA Library"){
-	    links[i].href = links[i].href + "&library=SMFA";
-		links[i].href = links[i].href + "&success_url=https://tischlibrary.tufts.edu/what-we-have/borrow-and-request/fines-fees/pay-fines/thank-you";
-		links[i].href = links[i].href + "&cancel_url=https://tischlibrary.tufts.edu/what-we-have/borrow-and-request/fines-fees/pay-fines/cancel";
-	  }
-	  
-	  else if (link_language_library == "Ginn Library"){
-	    links[i].href = links[i].href + "&library=GINN";
-		links[i].href = links[i].href + "&success_url=https://ginnlibrary.tufts.edu/services/borrow-renew/paying-fines/pay-your-fine/thank-you";
-		links[i].href = links[i].href + "&cancel_url=https://ginnlibrary.tufts.edu/services/borrow-renew/paying-fines/pay-your-fine/cancelled";
-	  }
-	  
-	  else if (link_language_library == "Hirsh Health Sciences Library"){
-	    links[i].href = links[i].href + "&library=HIRSH";
-		links[i].href = links[i].href + "&success_url=https://hirshlibrary.tufts.edu/services/ill/payment/thank-you";
-		links[i].href = links[i].href + "&cancel_url=https://hirshlibrary.tufts.edu/services/ill/payment/cancel"; 
-		 
-	  }
+		  else if (link_language_library == "music"){
+			links[i].href = links[i].href + "&library=MUSIC";
+			links[i].href = links[i].href + "&success_url=https://tischlibrary.tufts.edu/test/payment-thank-you";
+			links[i].href = links[i].href + "&cancel_url=https://tischlibrary.tufts.edu/test/payment-cancelled";
+		  }
+		  
+		  else if (link_language_library == "smfa"){
+			links[i].href = links[i].href + "&library=SMFA";
+			links[i].href = links[i].href + "&success_url=https://tischlibrary.tufts.edu/test/payment-thank-you";
+			links[i].href = links[i].href + "&cancel_url=https://tischlibrary.tufts.edu/test/payment-cancelled";
+		  }
+		  
+		  else if (link_language_library == "ginn"){
+			links[i].href = links[i].href + "&library=GINN";
+			links[i].href = links[i].href + "&success_url=https://ginnlibrary.tufts.edu/thank-you-payment-update";
+			links[i].href = links[i].href + "&cancel_url=https://ginnlibrary.tufts.edu/test/cancelled-payment";
+		  }
+		  
+		  else if (link_language_library == "hirsh"){
+			links[i].href = links[i].href + "&library=HIRSH";
+			links[i].href = links[i].href + "&success_url=https://hirshlibrary.tufts.edu/test/services/ill/payment/thank-you";
+			links[i].href = links[i].href + "&cancel_url=https://hirshlibrary.tufts.edu/test/services/ill/payment/cancel";
+
+		  }
       
   }
 
@@ -154,31 +175,31 @@ put content here
 ###############################################-->
 
 
-
+        <!-- test comment -->
         <div id="libraryCharges">
 		<h4 class="resourcesSub">Pay My Library Fees</h4>
-        <p style="padding:10px">Library fees can now be paid online.  Please pay at the website of the library from which you received the fee.  Most fees can be viewed in <a href="https://tufts-primo.hosted.exlibrisgroup.com/primo-explore/account?vid=01TUN&lang=en_US&institution=01TUN"><strong>My Account</strong><a/>.  Check with your library for more information or if you have questions. </p>
-                <ul class="resourcesList" style="margin-bottom:40px">
+        <p style="padding:10px; max-width: 800px;">Library fees can be paid online.  Please choose the link below corresponding to the library at which you owe fines. When you reach the credit card payment site, you can edit the amount you want to pay.  Please don’t pay more than the amount due at that library.  <br ><br /><strong>You have to pay each library's fines separately by returning to <a href="https://tufts-psb.primo.exlibrisgroup.com/discovery/account?vid=01TUN_INST:01TUN&section=overview&lang=en">My Account</a> and starting the process again.</strong><br /><br />Check with your library for more information or if you have questions. Contact is in footer below.</p>
+                <div class="resourcesList" style="margin-bottom:40px">
 
-						
-						<li><a href="https://exl-touchnet-connector.tufts.edu/touchnet?">Pay your Ginn Library fines </a> <span class="amount" style="font-weight:bold; color:red;"><%= ginn %></span></li>
-                        <li><a href="https://exl-touchnet-connector.tufts.edu/touchnet?">Pay your Hirsh Health Sciences Library fines</a> <span class="amount" style="font-weight:bold; color:red;"><%= hirsh %></span></li>
-                        <li><a href="https://exl-touchnet-connector.tufts.edu/touchnet?">Pay your Lilly Music Library fines</a> <span class="amount" style="font-weight:bold; color:red;"><%= music %></span></li>
-						<li><a href="https://exl-touchnet-connector.tufts.edu/touchnet?">Pay your SMFA Library fines</a> <span class="amount" style="font-weight:bold; color:red;"><%= smfa %></span></li>
-                        <li><a href="https://exl-touchnet-connector.tufts.edu/touchnet?">Pay your Tisch Library fines</a> <span class="amount" style="font-weight:bold; color:red;"><%= tisch %></li>
-
-                </ul>
+						<table id="fines">
+						<tr class="row"><td class="left"><a class="fine-link" id="ginn" href="https://exl-touchnet-connector.tufts.edu/touchnet?">Pay your Ginn Library fines</a></td><td class="right"> <span class="amount" style="font-weight:bold; color:red;"><%= ginn %></span></td></tr>
+                        <tr class="row"><td class="left"><a class="fine-link" id="hirsh" href="https://exl-touchnet-connector.tufts.edu/touchnet?">Pay your Hirsh Health Sciences Library fines</a> </td><td class="right"> <span class="amount" style="font-weight:bold; color:red;"><%= hirsh %></span></td></tr>
+                        <tr class="row"><td class="left"><a class="fine-link" id="music" href="https://exl-touchnet-connector.tufts.edu/touchnet?">Pay your Lilly Music Library fines</a> </td><td class="right"> <span class="amount" style="font-weight:bold; color:red;"><%= music %></span></td></tr>
+						<tr class="row"><td class="left"><a class="fine-link" id="smfa" href="https://exl-touchnet-connector.tufts.edu/touchnet?">Pay your SMFA Library fines</a> </td><td class="right"> <span class="amount" style="font-weight:bold; color:red;"><%= smfa %></span></td></tr>
+                        <tr class="row"><td class="left"><a class="fine-link" id="tisch" href="https://exl-touchnet-connector.tufts.edu/touchnet?">Pay your Tisch Library fines</a> </td><td class="right"> <span class="amount" style="font-weight:bold; color:red;"><%= tisch %></td></tr>
+						<table>
+                </div>
 
         </div>
 
 
 
 <h4 class="resourcesSubHirshILL">Pay Hirsh ILLiad Invoices</h4>
-				<ul class="resourcesListHirshILL" style="margin-bottom:40px">
+				<table class="resourcesListHirshILL" style="margin-bottom:40px">
 
-                       <li><a href="https://hirshlibrary.tufts.edu/services/ill/payment">Hirsh Health Sciences Library ILLiad invoices</a></li>
-
-                </ul>
+                       <tr><td><a href="https://hirshlibrary.tufts.edu/services/ill/payment">Hirsh Health Sciences Library ILLiad invoices</a></td></tr>
+										
+                </table>
 
 
 <!--#############################################
@@ -188,9 +209,210 @@ end content
 
 </div>
 
+<h4 class="resourcesSubHirshILL">Questions?</h4>
+
+ <p style="padding:0.8250em">For more information about fees or general circulation questions you can contact your library at the contacts below</p>
+
+<!--
+ <table style="width:95%" cellspacing="0">
+                <col width="15%"/>
+                <col width="25%"/>
+                <col width="20%"/>
+                <col width="20%"/>
+                <col width="20%"/>
+                <thead>
+                    <tr>
+                        <th align="left">
+                            <strong>Library</strong>
+                        </th>
+                        <th align="left">Pay my Library Charges</th>
+                        <th align="left">
+                            <strong>Circulation Email</strong>
+                        </th>
+                        <th align="left">
+                            <strong>Circulation Phone</strong>
+                        </th>
+                        <th align="left">
+                            <strong>Borrowing Policy</strong>
+                        </th>
+                    </tr>
+                </thead>
+                <tr>
+                    <td>Ginn Library</td>
+                    <td>
+                        <a target="_blank" href="https://ginnlibrary.tufts.edu/services/borrow-renew/paying-fines"
+                            >Pay your Ginn Library charges</a>
+                    </td>
+                    <td>
+                        <a href="mailto:ginncirc@tufts.edu">ginncirc@tufts.edu</a>
+                    </td>
+                    
+                    <td>617-627-3852</td>
+                    <td>
+                        <a href="https://ginnlibrary.tufts.edu/borrow-print-books"
+                            >Policies</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Hirsh Health Sciences Library</td>
+                    <td>
+                        <a target="_blank"
+                            href="https://hirshlibrary.tufts.edu/services/ill/payment">Pay your
+                            HHSL Library charges</a>
+                    </td>
+                    <td>
+                        <a href="mailto:hhsl@tufts.edu">hhsl@tufts.edu</a>
+                    </td>
+                    <td>617-636-6706</td>
+                    <td>
+                        <a href="https://hirshlibrary.tufts.edu/services/borrowing-library-material"
+                            >Policies</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Lilly Music Library</td>
+                    <td>
+                        <a target="_blank"
+                            href="https://tischlibrary.tufts.edu/what-we-have/borrow-and-request/borrow-or-renew-items/fines-fees/pay-fines"
+                            >Pay your Lilly Music Library charges</a>
+                    </td>
+                    <td>
+                        <a href="mailto:musiclib@tufts.edu">musiclib@tufts.edu</a>
+                    </td>
+                    <td>617-627-3594</td>
+                    <td>
+                        <a href="https://tischlibrary.tufts.edu/what-we-have/borrow-and-request/borrow-or-renew-items/borrow-items-tisch-music-smfa">Policies</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>SMFA Library</td>
+                    <td>
+                        <a target="_blank"
+                            href="https://tischlibrary.tufts.edu/what-we-have/borrow-and-request/borrow-or-renew-items/fines-fees/pay-fines"
+                            >Pay your SMFA Library charges</a>
+                    </td>
+                    <td>
+                        <a href="mailto:smfalibrary@tufts.edu ">smfalibrary@tufts.edu</a>
+                    </td>
+                    <td>617-627-0080</td>
+                    <td>
+                        <a
+                            href="https://tischlibrary.tufts.edu/what-we-have/borrow-and-request/borrow-or-renew-items/borrow-items-tisch-music-smfa"
+                            >Policies</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Tisch Library</td>
+                    <td>
+                        <a target="_blank"
+                            href="https://tischlibrary.tufts.edu/what-we-have/borrow-and-request/borrow-or-renew-items/fines-fees/pay-fines"
+                            >Pay your Tisch Library charges</a>
+                    </td>
+                    <td>
+                        <a href="mailto:tischfrontline@elist.tufts.edu"
+                            >tischfrontline@elist.tufts.edu</a>
+                    </td>
+                    <td>617-627-3347</td>
+                    <td>
+                        <a href="https://tischlibrary.tufts.edu/what-we-have/borrow-and-request/borrow-or-renew-items/borrow-items-tisch-music-smfa"
+                            >Policies</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Webster Vet Library</td>
+                    <td>Not available</td>
+                    <td>
+                        <a href="mailto:webvet@tufts.edu">webvet@tufts.edu</a>
+                    </td>
+                    <td>508-839-7957</td>
+                    <td>
+                        <a href="https://vetlibrary.tufts.edu/services/borrowing-document-delivery"
+                            >Policies</a>
+                    </td>
+                </tr>
+                
+            </table>
+			-->
+<div>
 
 
-<div id="footer">Copyright &copy;2013 <a href="http://www.tufts.edu">Tufts University</a> All Rights Reserved.</div>
+</div>
+
+<div id="footer">
+<div>
+<div id="float-first">
+<img src="tufts-logo-univ-white.svg" class="footer" />
+<br />
+<span style="font-size: .9em">Copyright &copy;2013 <a href="http://www.tufts.edu">Tufts University</a> <br /><span style="color:white;">All Rights Reserved.</span></span>
+</div>
+
+<div id="float-second">
+<table id="footer_table" style="font-size: .9em" cellspacing="0">
+ 
+                <tr>
+                    <td>Ginn Library</td>
+
+                    <td>
+                        <a href="mailto:ginncirc@tufts.edu">ginncirc@tufts.edu</a>
+                    </td>
+                    
+                    <td>617-627-3852</td>
+
+                </tr>
+                <tr>
+                    <td>Hirsh Health Sciences Library</td>
+
+                    <td>
+                        <a href="mailto:hhsl@tufts.edu">hhsl@tufts.edu</a>
+                    </td>
+                    <td>617-636-6706</td>
+         
+                </tr>
+                <tr>
+                    <td>Lilly Music Library</td>
+    
+                    <td>
+                        <a href="mailto:musiclib@tufts.edu">musiclib@tufts.edu</a>
+                    </td>
+                    <td>617-627-3594</td>
+
+                </tr>
+                <tr>
+                    <td>SMFA Library</td>
+
+                    <td>
+                        <a href="mailto:smfalibrary@tufts.edu ">smfalibrary@tufts.edu</a>
+                    </td>
+                    <td>617-627-0080</td>
+ 
+                </tr>
+                <tr>
+                    <td>Tisch Library</td>
+
+                    <td>
+                        <a href="mailto:tischfrontline@elist.tufts.edu"
+                            >tischfrontline@elist.tufts.edu</a>
+                    </td>
+                    <td>617-627-3347</td>
+
+                </tr>
+                <tr>
+                    <td>Webster Vet Library</td>
+
+                    <td>
+                        <a href="mailto:webvet@tufts.edu">webvet@tufts.edu</a>
+                    </td>
+                    <td>508-839-7957</td>
+       
+                </tr>
+                
+            </table>
+
+<br />
+
+</div>
+</div></div>
+
 
 
 
@@ -198,7 +420,7 @@ end content
 
   var _gaq = _gaq || [];
   _gaq.push(['_setAccount', 'UA-22719421-2']);
-  _gaq.push(['_trackPageview']);
+  _gaq.push(['_tr class="row"ackPageview']);
 
   (function() {
     var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;

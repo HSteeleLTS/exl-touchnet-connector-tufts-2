@@ -8,7 +8,7 @@ const dom = require('@xmldom/xmldom').DOMParser;
 const { requestp, frombase64 } = require('./utils');
 const { getFees, payFees } = require('./alma');
 const fs = require('fs');
-global.returnUrl = "https://www.library.tufts.edu/hsteele/alma_touchnet_integration/index.html";
+global.returnUrl = "https://exl-touchnet-connector.tufts.edu/fines";
 global.successUrl;
 global.cancelUrl;
 global.applicationUrl = "https://exl-touchnet-connector.tufts.edu/touchnet";
@@ -142,6 +142,8 @@ app.get('/fines', async (request, response) => {
  
 
 app.get('/touchnet', async (request, response) => {
+	
+ 
   const protocol = request.get('x-forwarded-proto') || request.protocol;
   const host = request.get('x-forwarded-host') || request.get('host');
 

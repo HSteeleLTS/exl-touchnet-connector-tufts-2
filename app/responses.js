@@ -28,8 +28,8 @@ const postback = (data ,postback_url) => {
         }
     },
         function (error, response, data) {
-        // console.log(error);
-        // console.log(response);
+        console.log(error);
+        console.log(response);
 
       
     });

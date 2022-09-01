@@ -1,0 +1,9 @@
+
+/* styles for 360 Link Resolver Page*/
+
+	/*styles to suppress display of "Refine or alter search criteria", and search box*/
+
+div #RefinerLink0		{display:none;}
+/*#CandyWrapper	{display:none;}*/	
+
+

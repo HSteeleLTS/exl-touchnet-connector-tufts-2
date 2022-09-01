@@ -1,0 +1,17 @@
+
+body {margin: 0; color: #000; font: 100%/1.4 helvetica, arial, verdana, helve, sans-serif; padding: 0;}
+
+header {height: 110px; background: #3172ae; border-bottom: 3px solid #000; }
+header h1 {font-size: 2em; text-transform: uppercase; color: #ffffff; float: left; margin: 20px 5px 10px 10px; margin-right: 5px; border: 0; }
+.libraries {}
+.libraries ul {list-style-type: none; padding: 0; }
+.libraries ul li {display: inline;}
+.libraries ul li a {height: 24px; width: 46%; color: #ffffff; font-size: 0.75em;}
+
+.clear { clear: both; }
+#content p {margin-top: 20px; margin-left: 20px}
+
+/*
+footer {height: 30px; background: #3172ae; padding-bottom: 0;}
+footer img.tufts {height: 35px; width: 112px; margin-top: 30px; margin-right: 5px; border: 0;}
+*/

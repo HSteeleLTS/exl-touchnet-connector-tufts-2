@@ -1,0 +1,13 @@
+#tuftsHeader {height: 95px; background: url(http://www.library.tufts.edu/branding/serialssolutions/background.jpg) repeat-x top left #427dc1;}
+img.tufts {height: 46px; width: 105px; float: right; margin-top: 10px; margin-right: 5px; border: 0;}
+img.banner {height: 95px; width: 539px; border: 0;}
+#tuftsNav {float: right; margin-top: 10px; margin-right: 10px; font-size: .875em;}
+
+/* Overwrite styles */
+
+hr.SS_EJPPreContentHorizontalRules {margin-top: 40px; height: 1px; color: #E5E5E5; background-color: #E5E5E5; border: 0;}
+hr.SS_HorizontalRules {height: 1px; color: #E5E5E5; background-color: #E5E5E5; border: 0;}
+div.SS_CopyRightStatement {text-align: center; font-size: .875em; margin-top: 20px;}
+div.SS_ToolNotes {font-size: .875em; margin-top: 5px; margin-left: 2px;}
+
+

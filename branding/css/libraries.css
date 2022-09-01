@@ -1,0 +1,16 @@
+
+body {margin: 0; color: #000; font: 100%/1.4 verdana, arial, helvetica, helve, sans-serif; padding: 0;}
+
+header {height: 110px; background: #3172ae; border-bottom: 8px solid #000; }
+header h1 {font-size: 2.6em; color: #ffffff; float: left; margin: 20px 5px 10px 10px; margin-right: 5px; border: 0; }
+.libraries {height: 24px; float: left; width: 46%; background: #000000; opacity: .8; }
+.librarylinks  {margin-left: 20px;}
+.librarylinks a {font-size: 0.75em; color: #ffffff; opacity: 1;}
+#tuftsNav {float: right; margin-top: 10px; margin-right: 10px; font-size: .875em;}
+.clear { clear: both; }
+#content p {margin-top: 20px; margin-left: 20px}
+
+/*
+footer {height: 30px; background: #3172ae; padding-bottom: 0;}
+footer img.tufts {height: 35px; width: 112px; margin-top: 30px; margin-right: 5px; border: 0;}
+*/
