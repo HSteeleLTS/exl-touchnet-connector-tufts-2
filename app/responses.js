@@ -18,7 +18,7 @@ const redirectForm = (ticket, user_id, upay_site_id, upay_site_url) => {
 
 const postback = (data ,postback_url) => {
     var request = require('request');
- 
+
 
     request.post({
         url: postback_url,
@@ -28,10 +28,9 @@ const postback = (data ,postback_url) => {
         }
     },
         function (error, response, data) {
-        console.log(error);
-        console.log(response);
 
-      
+
+
     });
 
 }
@@ -76,4 +75,3 @@ module.exports = {
     returnToReferrer,
     goToCancel
 };
-
